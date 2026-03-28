@@ -5,25 +5,26 @@ Classifies tickets and suggests actions.
 
 import os
 import json
-import requests
 from typing import Optional
 
+try:
+    from ollama import chat
+    OLLAMA_AVAILABLE = True
+except ImportError:
+    OLLAMA_AVAILABLE = False
+    import requests
 
-def get_ollama_client():
-    """Initialize Ollama client (local LLM)."""
-    ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
-    ollama_model = os.getenv("OLLAMA_MODEL", "llama3")
+
+def get_ollama_config():
+    """Get Ollama configuration from environment."""
+    ollama_model = os.getenv("OLLAMA_MODEL", "glm-5")
     
-    # Test connection
-    try:
-        response = requests.get(f"{ollama_url}/api/tags", timeout=2)
-        if response.status_code == 200:
-            print(f"✓ Ollama connected at {ollama_url}")
-            return {"url": ollama_url, "model": ollama_model}
-    except requests.exceptions.RequestException:
-        print(f"⚠️  Ollama not available at {ollama_url}")
+    if OLLAMA_AVAILABLE:
+        print(f"✓ Ollama chat API imported successfully (model: {ollama_model})")
+    else:
+        print(f"⚠️  Ollama chat API not available, will use requests fallback")
     
-    return None
+    return ollama_model
 
 
 def get_mock_classification(issue: str) -> dict:
@@ -50,11 +51,8 @@ def get_mock_classification(issue: str) -> dict:
     }
 
 
-def classify_ticket_with_ai(client: Optional[dict], issue: str) -> dict:
-    """Use Ollama (local LLM) to classify ticket."""
-    
-    if not client:
-        return get_mock_classification(issue)
+def classify_ticket_with_ai(ollama_model: str, issue: str) -> dict:
+    """Use Ollama (local LLM) to classify ticket using chat API."""
     
     prompt = f"""You are an IT operations classification system. Analyze this ticket and respond ONLY with valid JSON.
 
@@ -72,45 +70,54 @@ Respond with ONLY this JSON structure (no markdown, no explanation):
 Only return JSON, nothing else."""
     
     try:
-        response = requests.post(
-            f"{client['url']}/api/generate",
-            json={
-                "model": client['model'],
-                "prompt": prompt,
-                "stream": False,
-                "temperature": 0.3,
-            },
-            timeout=30
-        )
+        # Use chat API if available
+        if OLLAMA_AVAILABLE:
+            response = chat(
+                model=ollama_model,
+                messages=[{'role': 'user', 'content': prompt}],
+            )
+            response_text = response.message.content.strip()
+        else:
+            # Fallback to requests API
+            import requests
+            ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
+            api_response = requests.post(
+                f"{ollama_url}/api/generate",
+                json={
+                    "model": ollama_model,
+                    "prompt": prompt,
+                    "stream": False,
+                    "temperature": 0.3,
+                },
+                timeout=30
+            )
+            response_text = api_response.json()["response"].strip()
         
-        if response.status_code == 200:
-            response_text = response.json()["response"].strip()
-            
-            # Try to extract JSON if wrapped in markdown
-            if "```json" in response_text:
-                response_text = response_text.split("```json")[1].split("```")[0].strip()
-            elif "```" in response_text:
-                response_text = response_text.split("```")[1].split("```")[0].strip()
-            
-            result = json.loads(response_text)
-            return result
+        # Try to extract JSON if wrapped in markdown
+        if "```json" in response_text:
+            response_text = response_text.split("```json")[1].split("```")[0].strip()
+        elif "```" in response_text:
+            response_text = response_text.split("```")[1].split("```")[0].strip()
+        
+        result = json.loads(response_text)
+        return result
     
     except json.JSONDecodeError:
         print(f"JSON parse error, falling back to mock classification")
         return get_mock_classification(issue)
     except Exception as e:
-        print(f"Ollama error: {e}, using mock")
+        print(f"Ollama error: {e}, using mock classification")
         return get_mock_classification(issue)
 
 
 def process_ticket(issue: str) -> dict:
     """Main entry point: classify and prepare decision."""
     
-    # Get Ollama client (None if not available)
-    client = get_ollama_client()
+    # Get Ollama model
+    ollama_model = get_ollama_config()
     
     # Classify the ticket
-    classification = classify_ticket_with_ai(client, issue)
+    classification = classify_ticket_with_ai(ollama_model, issue)
     
     # Add original issue to the decision
     decision = {
