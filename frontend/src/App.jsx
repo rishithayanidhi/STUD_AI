@@ -38,86 +38,143 @@ function App() {
       <Header />
       <main style={{ flex: 1 }}>
         <div className="container">
-          {/* Intro Section */}
+          {/* Main Grid Layout */}
           <div
             style={{
-              background: "linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%)",
-              borderRadius: "12px",
-              padding: "2rem",
-              marginBottom: "2rem",
-              border: "1px solid #334155",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "1.5rem",
+              marginTop: "2rem",
             }}
           >
-            <h2
-              style={{
-                margin: "0 0 0.5rem 0",
-                fontSize: "1.5rem",
-                color: "#e0e7ff",
-              }}
-            >
-              🤖 Welcome to STUAI
-            </h2>
-            <p
-              style={{
-                margin: "0 0 1rem 0",
-                color: "#93c5fd",
-                fontSize: "1rem",
-              }}
-            >
-              <strong>Autonomous Operations Intelligence Platform</strong> -
-              Powered by Ollama AI + FastAPI
-            </p>
-            <p
-              style={{
-                margin: "0",
-                color: "#cbd5e1",
-                lineHeight: "1.6",
-                maxWidth: "800px",
-              }}
-            >
-              Submit your operational issues and watch our AI instantly classify
-              them, assign to the right team, and suggest actions. The system
-              learns from your ticket history to improve accuracy over time.{" "}
-              <strong>Perfect for automatic ticket routing</strong> and reducing
-              mean time to response (MTTR).
-            </p>
-          </div>
-
-          <div className="grid">
-            {/* Left Column: Form & Result */}
-            <div>
-              <div className="card">
-                <h2>🎯 Submit Ticket</h2>
-                <TicketForm onTicketSubmitted={handleTicketSubmitted} />
-              </div>
-
-              {lastResult && <TicketResult result={lastResult} />}
+            {/* Top Left: Submit Ticket Form */}
+            <div className="card">
+              <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>📝</span> Submit Ticket
+              </h2>
+              <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+                Describe your operational issue
+              </p>
+              <TicketForm onTicketSubmitted={handleTicketSubmitted} />
             </div>
 
-            {/* Right Column: Dashboard */}
-            <div>
+            {/* Top Right: Submit Overview */}
+            <div className="card">
+              <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>📊</span> Submit Overview
+              </h2>
+              <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+                System statistics and metrics
+              </p>
               <Dashboard allTickets={allTickets} />
+            </div>
 
-              {/* Recent Tickets */}
-              <div className="card" style={{ marginTop: "2rem" }}>
-                <h2>📋 Recent Tickets</h2>
-                <p
+            {/* Bottom Left: PostgreSQL Checkpoint */}
+            <div className="card">
+              <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>🗄️</span> PostgreSQL Checkpoint
+              </h2>
+              <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+                Database connection and status
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                <div style={{ padding: "0.75rem", background: "#0f172a", borderRadius: "6px", border: "1px solid #334155" }}>
+                  <span style={{ fontSize: "0.85rem", color: "#94a3b8" }}>Total Records</span>
+                  <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#60a5fa", marginTop: "0.25rem" }}>
+                    {allTickets.length}
+                  </div>
+                </div>
+                <div style={{ padding: "0.75rem", background: "#0f172a", borderRadius: "6px", border: "1px solid #334155" }}>
+                  <span style={{ fontSize: "0.85rem", color: "#94a3b8" }}>Status</span>
+                  <div style={{ fontSize: "0.9rem", color: "#10b981", marginTop: "0.25rem" }}>
+                    ✅ Connected
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Right: Classification Result */}
+            <div>
+              {lastResult ? (
+                <TicketResult result={lastResult} />
+              ) : (
+                <div className="card">
+                  <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>⚙️</span> AI Classification
+                  </h2>
+                  <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+                    Submit a ticket to see AI analysis
+                  </p>
+                  <div style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
+                    <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🔄</div>
+                    <p>Awaiting ticket submission...</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Recent Tickets (Full Width) */}
+            <div className="card" style={{ gridColumn: "1 / -1" }}>
+              <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>📋</span> Recent Tickets
+              </h2>
+              <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+                Last {Math.min(10, allTickets.length)} tickets from the system
+              </p>
+              {allTickets.length === 0 ? (
+                <p style={{ color: "#64748b", textAlign: "center", padding: "2rem" }}>
+                  No tickets yet. Submit one to get started!
+                </p>
+              ) : (
+                <div
                   style={{
-                    fontSize: "0.85rem",
-                    color: "#6b7280",
-                    marginTop: "-0.5rem",
-                    marginBottom: "1rem",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                    gap: "1rem",
                   }}
                 >
-                  Last {Math.min(5, allTickets.length)} tickets submitted to the
-                  system
-                </p>
-                {allTickets.length === 0 ? (
-                  <p
-                    style={{
-                      color: "#6b7280",
-                      marginTop: "1rem",
-                      textAlign: "center",
+                  {[...allTickets].reverse().slice(0, 10).map((ticket, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        padding: "1rem",
+                        background: "#0f172a",
+                        border: "1px solid #334155",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "#3b82f6";
+                        e.currentTarget.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.2)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "#334155";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      <div style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "0.5rem" }}>
+                        Ticket #{idx + 1}
+                      </div>
+                      <div style={{ fontSize: "0.85rem", color: "#cbd5e1", lineHeight: "1.4" }}>
+                        {typeof ticket === "string" ? ticket : ticket.issue || JSON.stringify(ticket).substring(0, 60)}
+                      </div>
+                      {typeof ticket !== "string" && ticket.category && (
+                        <div style={{ marginTop: "0.75rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                          <span className="badge badge-info">{ticket.category}</span>
+                          <span className="badge badge-warning">{ticket.priority}</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
+  );
                       padding: "2rem",
                     }}
                   >
