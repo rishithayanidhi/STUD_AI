@@ -17,7 +17,7 @@ except ImportError:
 
 def get_ollama_config():
     """Get Ollama configuration from environment."""
-    ollama_model = os.getenv("OLLAMA_MODEL", "glm-5")
+    ollama_model = os.getenv("OLLAMA_MODEL", "mistral")
     
     if OLLAMA_AVAILABLE:
         print(f"✓ Ollama chat API imported successfully (model: {ollama_model})")

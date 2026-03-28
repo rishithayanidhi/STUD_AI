@@ -23,7 +23,7 @@ def test_ollama_connection():
     
     # Test basic chat
     try:
-        from ollama import chat
+        from ollama import chat  # type: ignore
         print("✓ Ollama chat library imported successfully")
         
         response = chat(
@@ -70,7 +70,7 @@ def test_chat_streaming():
     print_header("TEST 3: Streaming Chat (Optional)")
     
     try:
-        from ollama import chat
+        from ollama import chat  # type: ignore
         ollama_model = get_ollama_config()
         
         print("Streaming response:")
@@ -96,7 +96,7 @@ def test_multi_turn_conversation():
     print_header("TEST 4: Multi-Turn Conversation")
     
     try:
-        from ollama import chat
+        from ollama import chat  # type: ignore
         ollama_model = get_ollama_config()
         
         messages = [
