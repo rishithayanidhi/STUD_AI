@@ -22,7 +22,8 @@ const categoryDescriptions = {
 };
 
 const priorityDescriptions = {
-  Critical: "Requires immediate action - system unavailable or severely impacted",
+  Critical:
+    "Requires immediate action - system unavailable or severely impacted",
   High: "Significant impact - urgent attention recommended within minutes",
   Medium: "Moderate impact - should be addressed within hours",
   Low: "Minor impact - can be scheduled during regular maintenance",
@@ -47,14 +48,15 @@ export function TicketResult({ result }) {
     similar_past_tickets,
   } = result;
   const confidence = Math.round((classification.confidence || 0) * 100);
-  const confidenceColor = confidence > 85 ? "#10b981" : confidence > 70 ? "#f59e0b" : "#ef4444";
+  const confidenceColor =
+    confidence > 85 ? "#10b981" : confidence > 70 ? "#f59e0b" : "#ef4444";
 
   return (
     <div
       className="ticket-result"
       style={{
-        background: "linear-gradient(135deg, #f0f9ff 0%, #f0fdf4 100%)",
-        borderLeft: "4px solid #2563eb",
+        background: "linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%)",
+        borderLeft: "4px solid #3b82f6",
       }}
     >
       <div
@@ -67,14 +69,14 @@ export function TicketResult({ result }) {
       >
         <span style={{ fontSize: "2rem" }}>✨</span>
         <div>
-          <h3 style={{ margin: "0", fontSize: "1.3rem" }}>
+          <h3 style={{ margin: "0", fontSize: "1.3rem", color: "#e0e7ff" }}>
             AI Classification Result
           </h3>
           <p
             style={{
               margin: "0.25rem 0 0 0",
               fontSize: "0.85rem",
-              color: "#6b7280",
+              color: "#94a3b8",
             }}
           >
             Analyzed and classified by Ollama AI in milliseconds
@@ -84,8 +86,13 @@ export function TicketResult({ result }) {
 
       <div className="classification-grid">
         {/* Category with Description */}
-        <div className="classification-item" style={{ borderLeft: "3px solid #ef4444", paddingLeft: "1rem" }}>
-          <label style={{ color: "#ef4444", fontWeight: "bold" }}>🏷️ Category</label>
+        <div
+          className="classification-item"
+          style={{ borderLeft: "3px solid #ef4444", paddingLeft: "1rem" }}
+        >
+          <label style={{ color: "#ef4444", fontWeight: "bold" }}>
+            🏷️ Category
+          </label>
           <value style={{ display: "block", marginTop: "0.5rem" }}>
             <span
               className={`badge ${categoryBadgeClass[classification.category] || "badge-info"}`}
@@ -93,14 +100,27 @@ export function TicketResult({ result }) {
               {classification.category}
             </span>
           </value>
-          <small style={{ display: "block", marginTop: "0.5rem", color: "#6b7280", fontSize: "0.8rem" }}>
-            {categoryDescriptions[classification.category] || "Operational issue"}
+          <small
+            style={{
+              display: "block",
+              marginTop: "0.5rem",
+              color: "#6b7280",
+              fontSize: "0.8rem",
+            }}
+          >
+            {categoryDescriptions[classification.category] ||
+              "Operational issue"}
           </small>
         </div>
 
         {/* Priority with Description */}
-        <div className="classification-item" style={{ borderLeft: "3px solid #f59e0b", paddingLeft: "1rem" }}>
-          <label style={{ color: "#f59e0b", fontWeight: "bold" }}>⚡ Priority</label>
+        <div
+          className="classification-item"
+          style={{ borderLeft: "3px solid #f59e0b", paddingLeft: "1rem" }}
+        >
+          <label style={{ color: "#f59e0b", fontWeight: "bold" }}>
+            ⚡ Priority
+          </label>
           <value style={{ display: "block", marginTop: "0.5rem" }}>
             <span
               className={`badge ${priorityBadgeClass[classification.priority] || "badge-info"}`}
@@ -108,52 +128,103 @@ export function TicketResult({ result }) {
               {classification.priority}
             </span>
           </value>
-          <small style={{ display: "block", marginTop: "0.5rem", color: "#6b7280", fontSize: "0.8rem" }}>
-            {priorityDescriptions[classification.priority] || "Standard response"}
+          <small
+            style={{
+              display: "block",
+              marginTop: "0.5rem",
+              color: "#6b7280",
+              fontSize: "0.8rem",
+            }}
+          >
+            {priorityDescriptions[classification.priority] ||
+              "Standard response"}
           </small>
         </div>
 
         {/* Team Assignment with Description */}
-        <div className="classification-item" style={{ borderLeft: "3px solid #3b82f6", paddingLeft: "1rem" }}>
-          <label style={{ color: "#3b82f6", fontWeight: "bold" }}>👥 Assigned Team</label>
-          <value style={{ display: "block", marginTop: "0.5rem", fontWeight: "500" }}>
+        <div
+          className="classification-item"
+          style={{ borderLeft: "3px solid #3b82f6", paddingLeft: "1rem" }}
+        >
+          <label style={{ color: "#3b82f6", fontWeight: "bold" }}>
+            👥 Assigned Team
+          </label>
+          <value
+            style={{ display: "block", marginTop: "0.5rem", fontWeight: "500" }}
+          >
             {classification.team}
           </value>
-          <small style={{ display: "block", marginTop: "0.5rem", color: "#6b7280", fontSize: "0.8rem" }}>
-            {teamDescriptions[classification.team] || "Specialist team assigned"}
+          <small
+            style={{
+              display: "block",
+              marginTop: "0.5rem",
+              color: "#6b7280",
+              fontSize: "0.8rem",
+            }}
+          >
+            {teamDescriptions[classification.team] ||
+              "Specialist team assigned"}
           </small>
         </div>
 
         {/* Confidence with Progress Bar */}
-        <div className="classification-item" style={{ borderLeft: "3px solid #10b981", paddingLeft: "1rem" }}>
-          <label style={{ color: "#10b981", fontWeight: "bold" }}>🧠 AI Confidence</label>
+        <div
+          className="classification-item"
+          style={{ borderLeft: "3px solid #10b981", paddingLeft: "1rem" }}
+        >
+          <label style={{ color: "#10b981", fontWeight: "bold" }}>
+            🧠 AI Confidence
+          </label>
           <value style={{ display: "block", marginTop: "0.5rem" }}>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-            }}>
-              <div style={{
-                flex: 1,
-                height: "8px",
-                background: "#e5e7eb",
-                borderRadius: "4px",
-                overflow: "hidden",
-              }}>
-                <div style={{
-                  height: "100%",
-                  width: `${confidence}%`,
-                  background: confidenceColor,
-                  transition: "all 0.3s ease",
-                }} />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  height: "8px",
+                  background: "#e5e7eb",
+                  borderRadius: "4px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${confidence}%`,
+                    background: confidenceColor,
+                    transition: "all 0.3s ease",
+                  }}
+                />
               </div>
-              <span style={{ fontWeight: "bold", color: confidenceColor, minWidth: "40px" }}>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: confidenceColor,
+                  minWidth: "40px",
+                }}
+              >
                 {confidence}%
               </span>
             </div>
           </value>
-          <small style={{ display: "block", marginTop: "0.5rem", color: "#6b7280", fontSize: "0.8rem" }}>
-            {confidence > 85 ? "Highly confident" : confidence > 70 ? "Moderately confident" : "Lower confidence"}
+          <small
+            style={{
+              display: "block",
+              marginTop: "0.5rem",
+              color: "#6b7280",
+              fontSize: "0.8rem",
+            }}
+          >
+            {confidence > 85
+              ? "Highly confident"
+              : confidence > 70
+                ? "Moderately confident"
+                : "Lower confidence"}
           </small>
         </div>
       </div>
@@ -163,9 +234,9 @@ export function TicketResult({ result }) {
         <p
           style={{
             padding: "1rem",
-            background: "#f0f9ff",
+            background: "#1e3a8a",
             borderRadius: "6px",
-            color: "#1e40af",
+            color: "#93c5fd",
             borderLeft: "4px solid #3b82f6",
           }}
         >
@@ -202,8 +273,16 @@ export function TicketResult({ result }) {
       {similar_past_tickets && similar_past_tickets.length > 0 && (
         <div className="action-section">
           <h4>🔗 Similar Past Tickets</h4>
-          <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: "-0.5rem", marginBottom: "1rem" }}>
-            The system identified {similar_past_tickets.length} similar issue(s) from your ticket history that could help resolve this issue
+          <p
+            style={{
+              fontSize: "0.85rem",
+              color: "#94a3b8",
+              marginTop: "-0.5rem",
+              marginBottom: "1rem",
+            }}
+          >
+            The system identified {similar_past_tickets.length} similar issue(s)
+            from your ticket history that could help resolve this issue
           </p>
           <div
             style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
@@ -213,8 +292,8 @@ export function TicketResult({ result }) {
                 key={idx}
                 style={{
                   padding: "0.75rem",
-                  background: "white",
-                  border: "1px solid #e5e7eb",
+                  background: "#0f172a",
+                  border: "1px solid #334155",
                   borderRadius: "6px",
                   fontSize: "0.85rem",
                   cursor: "pointer",
@@ -222,14 +301,16 @@ export function TicketResult({ result }) {
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.borderColor = "#3b82f6";
-                  e.target.style.boxShadow = "0 2px 4px rgba(59, 130, 246, 0.1)";
+                  e.target.style.boxShadow =
+                    "0 2px 4px rgba(59, 130, 246, 0.3)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.borderColor = "#e5e7eb";
+                  e.target.style.borderColor = "#334155";
                   e.target.style.boxShadow = "none";
                 }}
               >
-                <strong style={{ color: "#1e40af" }}>#{idx + 1}</strong> {ticket}
+                <strong style={{ color: "#60a5fa" }}>#{idx + 1}</strong>{" "}
+                <span style={{ color: "#cbd5e1" }}>{ticket}</span>
               </div>
             ))}
           </div>
@@ -237,21 +318,24 @@ export function TicketResult({ result }) {
       )}
 
       {/* Learning Stats Section */}
-      <div style={{
-        background: "#f3f4f6",
-        borderRadius: "6px",
-        padding: "1rem",
-        marginTop: "1.5rem",
-        fontSize: "0.85rem",
-        color: "#6b7280",
-        borderLeft: "3px solid #8b5cf6",
-      }}>
-        <p style={{ margin: "0", fontWeight: "500", color: "#7c3aed" }}>
+      <div
+        style={{
+          background: "#1e3a8a",
+          borderRadius: "6px",
+          padding: "1rem",
+          marginTop: "1.5rem",
+          fontSize: "0.85rem",
+          color: "#cbd5e1",
+          borderLeft: "3px solid #8b5cf6",
+        }}
+      >
+        <p style={{ margin: "0", fontWeight: "500", color: "#a78bfa" }}>
           📚 Learning from History
         </p>
         <p style={{ margin: "0.5rem 0 0 0" }}>
-          Your system learns from every ticket submitted. Over time, classification accuracy improves as the AI model 
-          sees more diverse operational scenarios and patterns unique to your infrastructure.
+          Your system learns from every ticket submitted. Over time,
+          classification accuracy improves as the AI model sees more diverse
+          operational scenarios and patterns unique to your infrastructure.
         </p>
       </div>
     </div>

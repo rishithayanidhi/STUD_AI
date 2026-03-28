@@ -5,19 +5,20 @@
 }
 
 :root {
-  --primary: #2563eb;
+  --primary: #3b82f6;
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
   --info: #3b82f6;
-  --bg: #f9fafb;
-  --bg-alt: #f3f4f6;
-  --text: #1f2937;
-  --text-muted: #6b7280;
-  --border: #e5e7eb;
+  --bg: #0f172a;
+  --bg-alt: #1e293b;
+  --bg-card: #1e293b;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border: #334155;
   --radius: 8px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -38,13 +39,14 @@ body {
 
 /* Header */
 header {
-  background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #001d3d 0%, #00244d 100%);
   color: white;
   padding: 2rem 0;
   box-shadow: var(--shadow-lg);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 1px solid var(--border);
 }
 
 header h1 {
@@ -107,7 +109,7 @@ header .status-dot.offline {
 
 /* Card */
 .card {
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow);
@@ -117,12 +119,13 @@ header .status-dot.offline {
 
 .card:hover {
   box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
 }
 
 .card h2 {
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  color: var(--primary);
+  color: var(--text);
 }
 
 /* Form */
@@ -147,13 +150,15 @@ header .status-dot.offline {
   font-size: 0.95rem;
   font-family: inherit;
   transition: border-color 0.3s ease;
+  background: #0f172a;
+  color: var(--text);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .form-group textarea {
@@ -181,7 +186,7 @@ button {
 }
 
 .btn-primary:hover {
-  background: #1d4ed8;
+  background: #2563eb;
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
@@ -195,9 +200,12 @@ button {
 .btn-secondary {
   background: var(--bg-alt);
   color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
+  background: var(--border);
+}
   background: var(--border);
 }
 
@@ -211,23 +219,23 @@ button {
 }
 
 .badge-success {
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
+  background: rgba(16, 185, 129, 0.2);
+  color: #86efac;
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
 }
 
 .badge-danger {
-  background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
 }
 
 .badge-info {
-  background: rgba(59, 130, 246, 0.1);
-  color: #2563eb;
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
 }
 
 /* Loading */
@@ -258,18 +266,18 @@ button {
 .alert-danger {
   background: rgba(239, 68, 68, 0.1);
   border-left-color: var(--danger);
-  color: #991b1b;
+  color: #fca5a5;
 }
 
 .alert-success {
   background: rgba(16, 185, 129, 0.1);
   border-left-color: var(--success);
-  color: #065f46;
+  color: #86efac;
 }
 
 /* Ticket Result */
 .ticket-result {
-  background: var(--bg-alt);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
@@ -289,7 +297,7 @@ button {
 }
 
 .classification-item {
-  background: white;
+  background: #0f172a;
   padding: 1rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -322,7 +330,7 @@ button {
 }
 
 .action-log {
-  background: white;
+  background: #0f172a;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem;
@@ -330,7 +338,7 @@ button {
   max-height: 150px;
   overflow-y: auto;
   font-family: monospace;
-  color: #555;
+  color: #93c5fd;
 }
 
 .action-log-item {
@@ -351,7 +359,7 @@ button {
 }
 
 .ticket-item {
-  background: white;
+  background: #0f172a;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem;

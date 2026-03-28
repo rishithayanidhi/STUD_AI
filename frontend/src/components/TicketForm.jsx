@@ -33,14 +33,14 @@ export function TicketForm({ onTicketSubmitted }) {
     <form onSubmit={handleSubmit}>
       <div
         style={{
-          background: "#f0f9ff",
-          border: "1px solid #e0f2fe",
+          background: "#1e3a8a",
+          border: "1px solid #3b82f6",
           borderRadius: "8px",
           padding: "1rem",
           marginBottom: "1.5rem",
         }}
       >
-        <p style={{ fontSize: "0.9rem", color: "#0369a1", margin: "0" }}>
+        <p style={{ fontSize: "0.9rem", color: "#93c5fd", margin: "0" }}>
           <strong>💡 How it works:</strong> Describe your operational issue and
           our AI will instantly classify it, assign it to the right team, and
           suggest an action.
@@ -58,7 +58,7 @@ export function TicketForm({ onTicketSubmitted }) {
         <p
           style={{
             fontSize: "0.85rem",
-            color: "#6b7280",
+            color: "#94a3b8",
             marginTop: "-0.5rem",
             marginBottom: "0.5rem",
           }}
@@ -75,7 +75,7 @@ export function TicketForm({ onTicketSubmitted }) {
           style={{ minHeight: "120px" }}
         />
         <small
-          style={{ color: "#9ca3af", display: "block", marginTop: "0.25rem" }}
+          style={{ color: "#64748b", display: "block", marginTop: "0.25rem" }}
         >
           {issue.length} characters
         </small>
@@ -92,7 +92,7 @@ export function TicketForm({ onTicketSubmitted }) {
         <p
           style={{
             fontSize: "0.85rem",
-            color: "#6b7280",
+            color: "#94a3b8",
             marginTop: "-0.5rem",
             marginBottom: "0.5rem",
           }}
@@ -145,10 +145,11 @@ export function TicketForm({ onTicketSubmitted }) {
         <div
           style={{
             padding: "1rem",
-            background: "#fef3c7",
+            background: "#1e3a8a",
             borderRadius: "6px",
             fontSize: "0.85rem",
-            color: "#78350f",
+            color: "#fbbf24",
+            border: "1px solid #3b82f6",
           }}
         >
           <strong>⚡ Speed:</strong> Classification in 2-3 seconds
@@ -156,10 +157,11 @@ export function TicketForm({ onTicketSubmitted }) {
         <div
           style={{
             padding: "1rem",
-            background: "#dbeafe",
+            background: "#1e293b",
             borderRadius: "6px",
             fontSize: "0.85rem",
-            color: "#0c4a6e",
+            color: "#60a5fa",
+            border: "1px solid #334155",
           }}
         >
           <strong>🧠 Accuracy:</strong> Learns from your tickets

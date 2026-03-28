@@ -39,15 +39,47 @@ function App() {
       <main style={{ flex: 1 }}>
         <div className="container">
           {/* Intro Section */}
-          <div style={{ background: 'linear-gradient(135deg, #dbeafe 0%, #ddd6fe 100%)', borderRadius: '12px', padding: '2rem', marginBottom: '2rem', border: '1px solid #bfdbfe' }}>
-            <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem', color: '#1e3a8a' }}>🤖 Welcome to STUAI</h2>
-            <p style={{ margin: '0 0 1rem 0', color: '#1e40af', fontSize: '1rem' }}>
-              <strong>Autonomous Operations Intelligence Platform</strong> - Powered by Ollama AI + FastAPI
+          <div
+            style={{
+              background: "linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%)",
+              borderRadius: "12px",
+              padding: "2rem",
+              marginBottom: "2rem",
+              border: "1px solid #334155",
+            }}
+          >
+            <h2
+              style={{
+                margin: "0 0 0.5rem 0",
+                fontSize: "1.5rem",
+                color: "#e0e7ff",
+              }}
+            >
+              🤖 Welcome to STUAI
+            </h2>
+            <p
+              style={{
+                margin: "0 0 1rem 0",
+                color: "#93c5fd",
+                fontSize: "1rem",
+              }}
+            >
+              <strong>Autonomous Operations Intelligence Platform</strong> -
+              Powered by Ollama AI + FastAPI
             </p>
-            <p style={{ margin: '0', color: '#164e63', lineHeight: '1.6', maxWidth: '800px' }}>
-              Submit your operational issues and watch our AI instantly classify them, assign to the right team, and suggest actions. 
-              The system learns from your ticket history to improve accuracy over time. <strong>Perfect for automatic ticket routing</strong> and 
-              reducing mean time to response (MTTR).
+            <p
+              style={{
+                margin: "0",
+                color: "#cbd5e1",
+                lineHeight: "1.6",
+                maxWidth: "800px",
+              }}
+            >
+              Submit your operational issues and watch our AI instantly classify
+              them, assign to the right team, and suggest actions. The system
+              learns from your ticket history to improve accuracy over time.{" "}
+              <strong>Perfect for automatic ticket routing</strong> and reducing
+              mean time to response (MTTR).
             </p>
           </div>
 
@@ -69,12 +101,35 @@ function App() {
               {/* Recent Tickets */}
               <div className="card" style={{ marginTop: "2rem" }}>
                 <h2>📋 Recent Tickets</h2>
-                <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '-0.5rem', marginBottom: '1rem' }}>
-                  Last {Math.min(5, allTickets.length)} tickets submitted to the system
+                <p
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#6b7280",
+                    marginTop: "-0.5rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  Last {Math.min(5, allTickets.length)} tickets submitted to the
+                  system
                 </p>
                 {allTickets.length === 0 ? (
-                  <p style={{ color: "#6b7280", marginTop: "1rem", textAlign: 'center', padding: '2rem' }}>
-                    <span style={{ fontSize: '2rem', display: 'block', marginBottom: '0.5rem' }}>📭</span>
+                  <p
+                    style={{
+                      color: "#6b7280",
+                      marginTop: "1rem",
+                      textAlign: "center",
+                      padding: "2rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "2rem",
+                        display: "block",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      📭
+                    </span>
                     No tickets yet. Submit one to get started!
                   </p>
                 ) : (
