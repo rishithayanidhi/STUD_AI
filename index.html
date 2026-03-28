@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous Ops Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 1em;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+      transition: border-color 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .spinner {
+      border: 4px solid #f0f0f0;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .result {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .result.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+    }
+
+    .classification {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .classification-item {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .classification-label {
+      font-weight: 600;
+      color: #667eea;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .classification-value {
+      font-size: 1.2em;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+
+    .badge.critical {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .badge.high {
+      background: #ffe0b2;
+      color: #e65100;
+    }
+
+    .badge.medium {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .badge.low {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .actions {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .actions h4 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .action-item {
+      padding: 8px 12px;
+      background: white;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      border-left: 3px solid #667eea;
+      color: #333;
+    }
+
+    .similar {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .similar h4 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .similar-item {
+      padding: 10px;
+      background: white;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      border-left: 3px solid #764ba2;
+      font-size: 0.95em;
+      color: #555;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #c62828;
+      margin-top: 20px;
+    }
+
+    .examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .example-btn {
+      background: #f5f5f5;
+      color: #333;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+    }
+
+    .example-btn:hover {
+      background: #efefef;
+      border-color: #667eea;
+    }
+
+    .example-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .example-text {
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🤖 Autonomous Ops Demo</h1>
+      <p>AI-Driven Incident Classification & Automation</p>
+    </div>
+
+    <div class="content">
+      <div class="form-group">
+        <label for="issue">Describe the IT Issue</label>
+        <textarea id="issue" placeholder="e.g., Production API failing with 500 error affecting payments..."
+          required></textarea>
+      </div>
+
+      <button onclick="submitTicket()">Analyze & Execute</button>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>AI is analyzing and taking action...</p>
+      </div>
+
+      <div id="quickExamples" style="margin-top: 30px;">
+        <label>Or try one of these examples:</label>
+        <div class="examples">
+          <button class="example-btn" onclick="setExample('Production API failing with 500 error affecting payments')">
+            <div class="example-title">Payment API Down</div>
+            <div class="example-text">High priority production incident</div>
+          </button>
+          <button class="example-btn" onclick="setExample('Database replication lag detected on primary cluster')">
+            <div class="example-title">Database Issue</div>
+            <div class="example-text">Infrastructure problem</div>
+          </button>
+          <button class="example-btn" onclick="setExample('Website responding slowly during peak hours')">
+            <div class="example-title">Performance</div>
+            <div class="example-text">Performance degradation</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="result" id="result">
+        <h3>📊 Classification & Execution Result</h3>
+
+        <div class="classification">
+          <div class="classification-item">
+            <div class="classification-label">Category</div>
+            <div class="classification-value" id="category">—</div>
+          </div>
+          <div class="classification-item">
+            <div class="classification-label">Priority</div>
+            <div class="classification-value">
+              <span class="badge" id="priority-badge"></span>
+            </div>
+          </div>
+          <div class="classification-item">
+            <div class="classification-label">Assigned Team</div>
+            <div class="classification-value" id="team">—</div>
+          </div>
+          <div class="classification-item">
+            <div class="classification-label">Confidence</div>
+            <div class="classification-value" id="confidence">—</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <h4>✅ Actions Executed</h4>
+          <div id="actions-list"></div>
+        </div>
+
+        <div class="similar" id="similar-section" style="display: none;">
+          <h4>🧠 Similar Past Tickets (Learning)</h4>
+          <div id="similar-list"></div>
+        </div>
+      </div>
+
+      <div class="error" id="error" style="display: none;"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8000';
+
+    function setExample(text) {
+      document.getElementById('issue').value = text;
+      submitTicket();
+    }
+
+    async function submitTicket() {
+      const issue = document.getElementById('issue').value.trim();
+
+      if (!issue) {
+        showError('Please describe an issue');
+        return;
+      }
+
+      if (issue.length < 5) {
+        showError('Please provide more details about the issue');
+        return;
+      }
+
+      showLoading(true);
+      hideError();
+      hideResult();
+
+      try {
+        const response = await fetch(`${API_BASE}/ticket`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ issue })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        displayResult(data);
+      } catch (error) {
+        showError(`Error: ${error.message}. Make sure the API is running: python main.py`);
+        console.error('Submission error:', error);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function displayResult(data) {
+      const classification = data.classification;
+      const priority = classification.priority.toLowerCase();
+
+      document.getElementById('category').textContent = classification.category;
+      document.getElementById('team').textContent = classification.team;
+      document.getElementById('confidence').textContent = `${(classification.confidence * 100).toFixed(0)}%`;
+
+      const priorityBadge = document.getElementById('priority-badge');
+      priorityBadge.textContent = classification.priority;
+      priorityBadge.className = `badge ${priority}`;
+
+      // Display executed actions
+      const actionsList = document.getElementById('actions-list');
+      actionsList.innerHTML = '';
+      data.actions_executed.forEach(action => {
+        const div = document.createElement('div');
+        div.className = 'action-item';
+        div.textContent = action;
+        actionsList.appendChild(div);
+      });
+
+      // Display similar tickets if any
+      const similarSection = document.getElementById('similar-section');
+      const similarList = document.getElementById('similar-list');
+
+      if (data.similar_past_tickets && data.similar_past_tickets.length > 0) {
+        similarSection.style.display = 'block';
+        similarList.innerHTML = '';
+        data.similar_past_tickets.forEach(ticket => {
+          const div = document.createElement('div');
+          div.className = 'similar-item';
+          div.textContent = ticket;
+          similarList.appendChild(div);
+        });
+      } else {
+        similarSection.style.display = 'none';
+      }
+
+      showResult();
+    }
+
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    function showResult() {
+      document.getElementById('result').classList.add('show');
+    }
+
+    function hideResult() {
+      document.getElementById('result').classList.remove('show');
+    }
+
+    function showError(message) {
+      const error = document.getElementById('error');
+      error.textContent = message;
+      error.style.display = 'block';
+    }
+
+    function hideError() {
+      document.getElementById('error').style.display = 'none';
+    }
+
+    // Allow Enter key to submit
+    document.getElementById('issue').addEventListener('keydown', function (e) {
+      if (e.ctrlKey && e.key === 'Enter') {
+        submitTicket();
+      }
+    });
+  </script>
+</body>
+
+</html>

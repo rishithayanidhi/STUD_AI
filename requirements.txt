@@ -1,0 +1,25 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+chromadb==0.4.14
+sentence-transformers==2.2.2
+pydantic==2.5.0
+requests==2.31.0
+psycopg2-binary==2.9.9
+
+# Ollama & Local LLM Support
+ollama==0.1.24
+
+# Agent Orchestration & Advanced Features
+langgraph==0.2.0
+langchain==0.1.0
+
+# Queue & Caching
+redis==5.0.1
+
+# Optional: GitHub & Slack Integrations
+PyGithub==2.1.1
+slack-sdk==3.23.0
+
+# Monitoring & Logging
+python-dotenv==1.0.0
+

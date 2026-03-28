@@ -1,0 +1,62 @@
+[
+  {
+    "issue": "Production API failing with 500 error affecting payments",
+    "decision": {
+      "issue": "Production API failing with 500 error affecting payments",
+      "category": "Incident",
+      "priority": "High",
+      "team": "Backend / Payments",
+      "confidence": 0.75,
+      "suggested_action": "Investigate and page Backend / Payments team"
+    },
+    "id": "Production_API_faili"
+  },
+  {
+    "issue": "Database replication lag detected on primary cluster",
+    "decision": {
+      "issue": "Database replication lag detected on primary cluster",
+      "category": "Request",
+      "priority": "Medium",
+      "team": "Operations",
+      "confidence": 0.75,
+      "suggested_action": "Investigate and page Operations team"
+    },
+    "id": "Database_replication"
+  },
+  {
+    "issue": "Website responding slowly during peak hours",
+    "decision": {
+      "issue": "Website responding slowly during peak hours",
+      "category": "Request",
+      "priority": "Medium",
+      "team": "Operations",
+      "confidence": 0.75,
+      "suggested_action": "Investigate and page Operations team"
+    },
+    "id": "Website_responding_s"
+  },
+  {
+    "issue": "Production API failing with 500 error affecting payments",
+    "decision": {
+      "issue": "Production API failing with 500 error affecting payments",
+      "category": "Incident",
+      "priority": "High",
+      "team": "Backend / Payments",
+      "confidence": 0.75,
+      "suggested_action": "Investigate and page Backend / Payments team"
+    },
+    "id": "Production_API_faili"
+  },
+  {
+    "issue": "Production API failing with 500 error affecting payments",
+    "decision": {
+      "issue": "Production API failing with 500 error affecting payments",
+      "category": "Incident",
+      "priority": "High",
+      "team": "Backend / Payments",
+      "confidence": 0.75,
+      "suggested_action": "Investigate and page Backend / Payments team"
+    },
+    "id": "Production_API_faili"
+  }
+]

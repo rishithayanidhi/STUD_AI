@@ -1,0 +1,50 @@
+# Docker build and runtime excludes
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Development files
+*.log
+debug.py
+test_*.py
+
+# Docker files (don't include in build context)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+docs/
+README.md
+*.md
+
+# Node stuff
+node_modules/
+npm-debug.log

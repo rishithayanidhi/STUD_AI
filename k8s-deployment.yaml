@@ -1,0 +1,197 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: stuai
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stuai-config
+  namespace: stuai
+data:
+  OLLAMA_MODEL: "mistral"
+  TICKET_THRESHOLD: "0.7"
+  LOG_LEVEL: "INFO"
+  POSTGRES_DB: "stuai_prod"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: stuai-secrets
+  namespace: stuai
+type: Opaque
+stringData:
+  # These will be injected from your .env file at deployment time
+  # Use: kubectl create secret generic stuai-secrets --from-env-file=.env --namespace=stuai
+  GITHUB_TOKEN: ""
+  SLACK_BOT_TOKEN: ""
+  POSTGRES_PASSWORD: ""
+  REDIS_PASSWORD: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stuai-api
+  namespace: stuai
+  labels:
+    app: stuai
+    component: api
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: stuai
+      component: api
+  template:
+    metadata:
+      labels:
+        app: stuai
+        component: api
+    spec:
+      serviceAccountName: stuai-api
+      containers:
+      - name: api
+        image: stuai:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: stuai-config
+        - secretRef:
+            name: stuai-secrets
+        env:
+        - name: OLLAMA_HOST
+          value: "http://ollama:11434"
+        - name: POSTGRES_HOST
+          value: "postgres"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 2
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stuai-api
+  namespace: stuai
+  labels:
+    app: stuai
+spec:
+  type: LoadBalancer
+  selector:
+    app: stuai
+    component: api
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: stuai-api-hpa
+  namespace: stuai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: stuai-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: stuai-api
+  namespace: stuai
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: stuai-api
+  namespace: stuai
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: stuai-api
+  namespace: stuai
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: stuai-api
+subjects:
+- kind: ServiceAccount
+  name: stuai-api
+  namespace: stuai
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: stuai-api
+  namespace: stuai
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: stuai
+      component: api
