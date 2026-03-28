@@ -8,7 +8,7 @@ import json
 from typing import Optional
 
 try:
-    from ollama import chat
+    from ollama import chat  # type: ignore
     OLLAMA_AVAILABLE = True
 except ImportError:
     OLLAMA_AVAILABLE = False
