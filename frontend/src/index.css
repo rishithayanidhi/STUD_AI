@@ -207,8 +207,6 @@ button {
 .btn-secondary:hover {
   background: var(--border);
 }
-  background: var(--border);
-}
 
 /* Badge */
 .badge {

@@ -175,9 +175,9 @@ function App() {
       </main>
     </>
   );
-                      padding: "2rem",
-                    }}
-                  >
+}
+
+export default App;
                     <span
                       style={{
                         fontSize: "2rem",
