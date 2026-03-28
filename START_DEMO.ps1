@@ -2,36 +2,35 @@
 # Quick Start Script for STUAI Demo
 # Run: .\START_DEMO.ps1
 
-Write-Host @"
-================================================
-  STUAI - Autonomous Operations Demo Launcher
-================================================
-"@ -ForegroundColor Cyan
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host "  STUAI - Autonomous Operations Demo Launcher" -ForegroundColor Cyan
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host ""
 
 # Check if Node.js is installed
 try {
     $nodeVersion = node --version
-    Write-Host "✓ Node.js found: $nodeVersion" -ForegroundColor Green
+    Write-Host "Check Node.js found: $nodeVersion" -ForegroundColor Green
 } catch {
-    Write-Host "✗ Node.js not found. Install from: https://nodejs.org" -ForegroundColor Red
+    Write-Host "ERROR: Node.js not found. Install from: https://nodejs.org" -ForegroundColor Red
     exit 1
 }
 
 # Check if Python is installed
 try {
     $pythonVersion = python --version
-    Write-Host "✓ Python found: $pythonVersion" -ForegroundColor Green
+    Write-Host "Check Python found: $pythonVersion" -ForegroundColor Green
 } catch {
-    Write-Host "✗ Python not found. Please install Python." -ForegroundColor Red
+    Write-Host "ERROR: Python not found. Please install Python." -ForegroundColor Red
     exit 1
 }
 
 # Check if Ollama is running
 try {
     $response = Invoke-WebRequest -Uri "http://localhost:11434/api/tags" -UseBasicParsing -TimeoutSec 2 -ErrorAction SilentlyContinue
-    Write-Host "✓ Ollama is running" -ForegroundColor Green
+    Write-Host "Check Ollama is running" -ForegroundColor Green
 } catch {
-    Write-Host "⚠ Warning: Ollama not detected. Start it from: https://ollama.com" -ForegroundColor Yellow
+    Write-Host "WARNING: Ollama not detected. Start it from: https://ollama.com" -ForegroundColor Yellow
 }
 
 Write-Host ""
@@ -52,18 +51,17 @@ if (-not (Test-Path "frontend/node_modules")) {
 
 Start-Process -FilePath "cmd.exe" -ArgumentList "/k cd /d `"$PSScriptRoot\frontend`" && npm run dev"
 
-Write-Host @"
-
-================================================
-  ✅ Demo Servers Starting!
-================================================
-
-Backend:  http://localhost:8000
-Frontend: http://localhost:3000
-Docs:     http://localhost:8000/docs
-
-Close the terminal windows when done.
-Press Enter to continue...
-"@ -ForegroundColor Green
+Write-Host ""
+Write-Host "================================================" -ForegroundColor Green
+Write-Host "  SUCCESS: Demo Servers Starting!" -ForegroundColor Green
+Write-Host "================================================" -ForegroundColor Green
+Write-Host ""
+Write-Host "Backend:  http://localhost:8000" -ForegroundColor Green
+Write-Host "Frontend: http://localhost:3000" -ForegroundColor Green
+Write-Host "Docs:     http://localhost:8000/docs" -ForegroundColor Green
+Write-Host ""
+Write-Host "Close the terminal windows when done." -ForegroundColor Yellow
+Write-Host "Press Enter to exit..." -ForegroundColor Yellow
+Write-Host ""
 
 Read-Host
